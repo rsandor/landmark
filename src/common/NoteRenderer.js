@@ -5,14 +5,15 @@ export function renderNote (note, clef) {
   const div = document.createElement('div')
   const renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
 
-  renderer.resize(220, 220);
-  const context = renderer.getContext();
+  const context = renderer.getContext()
+  renderer.resize(325, 380)
+  context.scale(1.75, 1.75)
 
-  const treble = new VF.Stave(20, 0, 190)
+  const treble = new VF.Stave(20, 0, 160)
   treble.addClef("treble")
   treble.setContext(context).draw()
 
-  const bass = new VF.Stave(20, 100, 190)
+  const bass = new VF.Stave(20, 100, 160)
   bass.addClef("bass")
   bass.setContext(context).draw()
 
@@ -28,7 +29,7 @@ export function renderNote (note, clef) {
     new VF.StaveNote({ clef, keys: [note], duration: "w" })
   ]
 
-  const voice = new VF.Voice({ num_beats: 4, beat_value: 4 });
+  const voice = new VF.Voice({ num_beats: 4, beat_value: 4 })
   voice.addTickables(notes)
 
   const formatter = new VF.Formatter()

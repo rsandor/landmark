@@ -45,7 +45,7 @@ function FlashCard ({ clef, note, noteVisible, visible, onMouseDown }) {
   return (
     <div className="FlashCard" onMouseDown={onMouseDown}>
       <Staff note={note} clef={clef} />
-      <div className="Answer">{noteVisible ? note.replace('/', '').toUpperCase() : '?'}</div>
+      <div className={`Answer ${noteVisible ? 'visible' : ''}`}>{noteVisible ? note.replace('/', '').toUpperCase() : '?'}</div>
     </div>
   )
 }
