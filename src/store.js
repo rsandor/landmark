@@ -14,16 +14,12 @@ function saveState () {
 
 function saveStateProd () {
   const state = store.getState()
-  localStorage.setItem('reduxState', JSON.stringify({
-    preferences: state.preferences
-  }))
+  localStorage.setItem('reduxState', JSON.stringify({ }))
 }
 
 function saveStateDev () {
   const state = store.getState()
-  localStorage.setItem('reduxState', JSON.stringify({
-    preferences: state.preferences
-  }))
+  localStorage.setItem('reduxState', JSON.stringify({ }))
 }
 
 const store = createStore(rootReducer, loadSavedState())
