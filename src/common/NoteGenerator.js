@@ -27,7 +27,25 @@ export function sortNotes (noteArray) {
   })
 }
 
+window.rootNotes = () => {
+  const s = new Set()
+  notes.treble.second.forEach(n => s.add(n))
+  notes.bass.second.forEach(n => s.add(n))
+  const n = Array.from(s)
+  sortNotes(n)
+  console.log(n.map(note => note.replace('/', '').toUpperCase()).join(' '))
+}
+
 window.secondNotes = () => {
+  const s = new Set()
+  notes.treble.second.forEach(n => s.add(n))
+  notes.bass.second.forEach(n => s.add(n))
+  const n = Array.from(s)
+  sortNotes(n)
+  console.log(n.map(note => note.replace('/', '').toUpperCase()).join(' '))
+}
+
+window.thirdNotes = () => {
   const s = new Set()
   notes.treble.third.forEach(n => s.add(n))
   notes.bass.third.forEach(n => s.add(n))
@@ -59,8 +77,11 @@ class NoteGenerator {
   }
 
   next () {
+    const defaultNote = { clef: 'treble', note: 'c/4' }
     const clef = this.randomClef()
+    if (!clef) return defaultNote
     const note = this.randomNote(clef)
+    if (!note) return defaultNote
     return { clef, note }
   }
 }
