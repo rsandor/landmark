@@ -1,12 +1,24 @@
 import Reducer from './Reducer'
 
 const Settings = new Reducer('NesStudio/sprite', {
-  foo: 'bar'
+  clef: {
+    treble: true,
+    bass: true
+  },
+  notes: {
+    root: true,
+    second: false,
+    third: false
+  }
 })
 
-const toggle = Settings.action('toggle', (next, payload, action) => {
-  next.foo = next.foo === 'bar' ? 'baz' : 'bar'
+const setValue = Settings.action('setValue', (next, payload) => {
+  const { key, value } = payload
+  const [major, minor] = key.split('.')
+  if (!(major in next)) return
+  if (!(minor in next[major])) return
+  next[major][minor] = value
 })
 
 export default Settings.reducer
-export { toggle }
+export { setValue }

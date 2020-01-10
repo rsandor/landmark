@@ -1,0 +1,50 @@
+.App {
+  $color-white: #efefef;
+  $color-black: #111;
+  $transition: background-color 0.25s ease, color 0.25s ease;
+
+  text-align: center;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+
+  background-color: $color-white;
+  color: $color-black;
+  transition: $transition;
+
+  &.settings {
+    background-color: $color-black;
+    color: $color-white;
+    header {
+      background-color: $color-white;
+      color: $color-black;
+    }
+  }
+
+  header {
+    position: relative;
+    padding: 12px 0 8px;
+    margin-bottom: 32px;
+
+    background-color: $color-black;
+    color: $color-white;
+    transition: $transition;
+
+    h1 { margin: 0 }
+
+    .menu-toggle {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      padding: 12px 12px 0px;
+      cursor: pointer;
+    }
+  }
+
+  .Answer {
+    margin-top: 60px;
+    font-size: 120px;
+    font-family: abel;
+    color: #333;
+  }
+}

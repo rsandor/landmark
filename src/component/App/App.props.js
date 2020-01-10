@@ -1,13 +1,14 @@
 import * as reactRedux from 'react-redux'
-import { toggle } from '../../reducers/settings'
+import { setValue } from '../../reducers/settings'
 
 function state (state) {
-  return { settings: state.settings }
+  const { settings } = state
+  return { settings }
 }
 
 function dispatch (dispatch) {
   return {
-    toggle: () => dispatch(toggle())
+    setValue: ({ key, value }) => dispatch(setValue({ key, value }))
   }
 }
 

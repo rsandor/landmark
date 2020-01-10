@@ -10,7 +10,7 @@ body {
 
 html, body, #root {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -22,3 +22,6 @@ code {
     monospace;
 }
 
+.pull-right { float: right; }
+.pull-left { float: left; }
+.clearfix:after { content: ""; display: table; clear: both; }

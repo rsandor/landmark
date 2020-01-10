@@ -1,7 +1,5 @@
-import defaults from 'lodash/defaults'
 import { randomElement } from './random'
-
-const clefs = ['treble', 'bass']
+import store from '../store'
 
 const notes = {
   treble: {
@@ -29,28 +27,40 @@ export function sortNotes (noteArray) {
   })
 }
 
+window.secondNotes = () => {
+  const s = new Set()
+  notes.treble.third.forEach(n => s.add(n))
+  notes.bass.third.forEach(n => s.add(n))
+  const n = Array.from(s)
+  sortNotes(n)
+  console.log(n.map(note => note.replace('/', '').toUpperCase()).join(' '))
+}
+
+
 class NoteGenerator {
+  get settings () {
+    return store.getState().settings
+  }
+
   randomClef () {
+    const clefs = []
+    if (this.settings.clef.treble) clefs.push('treble')
+    if (this.settings.clef.bass) clefs.push('bass')
     return randomElement(clefs)
   }
 
-  randomNote (clef, opts = {}) {
-    const options = defaults({}, opts, {
-      root: true,
-      second: false,
-      third: false
-    })
+  randomNote (clef) {
     const noteSelection = Array.from(new Set([].concat(
-      options.root ? notes[clef].root : [],
-      options.second ? notes[clef].second : [],
-      options.third ? notes[clef].third : []
+      this.settings.notes.root ? notes[clef].root : [],
+      this.settings.notes.second ? notes[clef].second : [],
+      this.settings.notes.third ? notes[clef].third : []
     )))
     return randomElement(noteSelection)
   }
 
-  next (opts = {}) {
+  next () {
     const clef = this.randomClef()
-    const note = this.randomNote(clef, opts)
+    const note = this.randomNote(clef)
     return { clef, note }
   }
 }
