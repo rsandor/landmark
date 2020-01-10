@@ -1,7 +1,10 @@
 .App {
-  $color-white: #efefef;
+  $color-white: #efefe9;
   $color-black: #000;
-  $transition: background-color 0.25s ease, color 0.25s ease;
+  $transition-duration: 0.4s;
+  $transition:
+    background-color $transition-duration ease,
+    color $transition-duration ease;
 
   text-align: center;
   height: 100%;
