@@ -3,12 +3,12 @@ import './App.scss'
 
 import { connect } from './App.props'
 import NoteGenerator from '../../common/NoteGenerator'
-import Staff from '../Staff'
+import { renderNote } from '../../common/NoteRenderer'
 
-function SettingsMenu ({ settings, setBassClef, setGrandStaff, setTrebleClef, toggleNotes, visible }) {
+function SettingsMenu ({ settings, setBassClef, setGrandStaff, setTrebleClef, toggleNotes, setTheme, visible }) {
   if (!visible) return null
 
-  const { clef, notes } = settings
+  const { clef, notes, theme } = settings
 
   const isGrandStaff = clef.treble && clef.bass
   const isTrebleClef = clef.treble && !clef.bass
@@ -41,15 +41,29 @@ function SettingsMenu ({ settings, setBassClef, setGrandStaff, setTrebleClef, to
           </div>
         </div>
       </div>
+
+      <div className="section">
+        <h3>Theme</h3>
+        <div className="selector">
+          <div onClick={() => setTheme('light')} className={`option${theme === 'light' ? ' selected' : ''}`}>
+            Light
+          </div>
+          <div onClick={() => setTheme('dark')} className={`option${theme === 'dark' ? ' selected' : ''}`}>
+            Dark
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
 function FlashCard ({ clef, note, noteVisible, visible, onMouseDown }) {
   if (!visible) return null
+  const src = renderNote(note, clef)
+  const alt = `Staff displaying ${note} on the ${clef} clef.`
   return (
     <div className="FlashCard" onMouseDown={onMouseDown}>
-      <Staff note={note} clef={clef} />
+      <div className="Staff"><img src={src} alt={alt} /></div>
       <div className={`Answer ${noteVisible ? 'visible' : ''}`}>{noteVisible ? note.replace('/', '').toUpperCase() : '?'}</div>
     </div>
   )
@@ -83,7 +97,7 @@ class ConnectedApp extends Component {
 
   render () {
     return (
-      <div className={`App ${this.state.settingsOpen ? 'settings' : ''}`}>
+      <div className={`App ${this.state.settingsOpen ? 'settings' : ''} theme-${this.props.settings.theme}`}>
         <header className="clearfix">
           <h1>
             Landmark
@@ -103,7 +117,8 @@ class ConnectedApp extends Component {
             setTrebleClef={this.props.setTrebleClef}
             setBassClef={this.props.setBassClef}
             setGrandStaff={this.props.setGrandStaff}
-            toggleNotes={this.props.toggleNotes} />
+            toggleNotes={this.props.toggleNotes}
+            setTheme={this.props.setTheme} />
         </main>
       </div>
     )

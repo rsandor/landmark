@@ -1,5 +1,5 @@
 import * as reactRedux from 'react-redux'
-import { setValue, setBassClef, setGrandStaff, setTrebleClef, toggleNotes } from '../../reducers/settings'
+import { setTheme, setBassClef, setGrandStaff, setTrebleClef, toggleNotes } from '../../reducers/settings'
 
 function state (state) {
   const { settings } = state
@@ -8,7 +8,7 @@ function state (state) {
 
 function dispatch (dispatch) {
   return {
-    setValue: ({ key, value }) => dispatch(setValue({ key, value })),
+    setTheme: (theme) => dispatch(setTheme({ theme })),
     setBassClef: () => dispatch(setBassClef()),
     setTrebleClef: () => dispatch(setTrebleClef()),
     setGrandStaff: () => dispatch(setGrandStaff()),
