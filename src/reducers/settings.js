@@ -10,10 +10,12 @@ const Settings = new Reducer('Landmark/settings', {
     root: true,
     second: false,
     third: false
-  }
+  },
+  context: 'whole'
 })
 
 const themes = new Set(['light', 'dark'])
+const contexts = new Set(['whole', 'random-rests', 'random-notes'])
 
 const setTheme = Settings.action('setTheme', (next, payload) => {
   const {theme} = payload
@@ -50,5 +52,18 @@ const setBassClef = Settings.action('setBassClef', next => {
   next.clef = { treble: false, bass: true }
 })
 
+const setContext = Settings.action('setContext', (next, payload) => {
+  if (contexts.has(payload.context)) {
+    next.context = payload.context
+  }
+})
+
 export default Settings.reducer
-export { setTheme, toggleNotes, setGrandStaff, setTrebleClef, setBassClef }
+export {
+  setTheme,
+  toggleNotes,
+  setGrandStaff,
+  setTrebleClef,
+  setBassClef,
+  setContext
+}

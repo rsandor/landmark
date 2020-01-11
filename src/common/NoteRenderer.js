@@ -1,24 +1,22 @@
 import store from '../store'
 import { Flow } from 'vexflow'
 
-export function renderNote (note, clef) {
+export function renderNote (note, clef, theme) {
   const {settings} = store.getState()
   const {bass, treble} = settings.clef
-  if (bass && treble) return renderGrandStaffNote(note, clef)
-  if (bass) return renderBassStaffNote(note, clef)
-  if (treble) return renderTrebleStaffNote(note, clef)
+  if (bass && treble) return renderGrandStaffNote(note, clef, theme)
+  if (bass) return renderBassStaffNote(note, theme)
+  if (treble) return renderTrebleStaffNote(note, theme)
   return ''
 }
 
-function getContext () {
+function getContext (theme) {
   const div = document.createElement('div')
   const renderer = new Flow.Renderer(div, Flow.Renderer.Backends.SVG)
   const context = renderer.getContext()
   renderer.resize(325, 380)
   context.scale(1.75, 1.75)
 
-  const {settings} = store.getState()
-  const {theme} = settings
   if (theme === 'dark') {
     context.setFillStyle('#efefe9')
     context.setStrokeStyle('#efefe9')
@@ -31,8 +29,8 @@ function svgToDataUrl (svg) {
   return `data:image/svg+xml;base64,${window.btoa(new XMLSerializer().serializeToString(svg))}`
 }
 
-function renderBassStaffNote (note) {
-  const { context, div } = getContext()
+function renderBassStaffNote (note, theme) {
+  const { context, div } = getContext(theme)
 
   const bass = new Flow.Stave(0, 40, 185)
   bass.addClef("bass")
@@ -48,13 +46,8 @@ function renderBassStaffNote (note) {
   return svgToDataUrl(div.querySelector('svg'))
 }
 
-function renderTrebleStaffNote (note) {
-  const div = document.createElement('div')
-  const renderer = new Flow.Renderer(div, Flow.Renderer.Backends.SVG)
-
-  const context = renderer.getContext()
-  renderer.resize(325, 380)
-  context.scale(1.75, 1.75)
+function renderTrebleStaffNote (note, theme) {
+  const { context, div } = getContext(theme)
 
   const treble = new Flow.Stave(0, 40, 185)
   treble.addClef("treble")
@@ -70,8 +63,8 @@ function renderTrebleStaffNote (note) {
   return svgToDataUrl(div.querySelector('svg'))
 }
 
-function renderGrandStaffNote (note, clef) {
-  const { context, div } = getContext()
+function renderGrandStaffNote (note, clef, theme) {
+  const { context, div } = getContext(theme)
 
   const treble = new Flow.Stave(20, 0, 160)
   treble.addClef("treble")
