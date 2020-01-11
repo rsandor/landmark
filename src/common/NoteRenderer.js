@@ -16,7 +16,7 @@ function renderBassStaffNote (note, settings) {
   const { context, div } = getContext(settings)
   const notes = getNotes(note, 'bass', settings)
   const bass = new Flow.Stave(0, 40, 185)
-  bass.addClef("bass")
+  bass.addClef('bass')
   bass.setContext(context).draw()
   Flow.Formatter.FormatAndDraw(context, bass, notes, { auto_beam: true })
   return svgToDataUrl(div.querySelector('svg'))
@@ -36,11 +36,11 @@ function renderGrandStaffNote (note, clef, settings) {
   const { context, div } = getContext(settings)
 
   const treble = new Flow.Stave(20, 0, 160)
-  treble.addClef("treble")
+  treble.addClef('treble')
   treble.setContext(context).draw()
 
   const bass = new Flow.Stave(20, 100, 160)
-  bass.addClef("bass")
+  bass.addClef('bass')
   bass.setContext(context).draw()
 
   const connector = new Flow.StaveConnector(treble, bass)
@@ -51,15 +51,16 @@ function renderGrandStaffNote (note, clef, settings) {
   brace.setType('brace')
   brace.setContext(context).draw()
 
-  const notes = [new Flow.StaveNote({ clef, keys: [note], duration: "w" })]
-  const voice = new Flow.Voice({ num_beats: 4, beat_value: 4 })
-  voice.addTickables(notes)
-  const formatter = new Flow.Formatter()
-  formatter.joinVoices([voice]).format([voice], 150)
-  voice.draw(context, clef === 'treble' ? treble : bass)
+  const notes = getNotes(note, clef, settings)
+  const altNotes = getOtherStaffNotes(clef === 'bass' ? 'treble' : 'bass', settings)
+  const mainClef = (clef === 'bass') ? bass : treble
+  const altClef = (clef === 'bass') ? treble : bass
+  Flow.Formatter.FormatAndDraw(context, mainClef, notes, { auto_beam: true })
+  Flow.Formatter.FormatAndDraw(context, altClef, altNotes, { auto_beam: true })
 
   return svgToDataUrl(div.querySelector('svg'))
 }
+
 function svgToDataUrl (svg) {
   return `data:image/svg+xml;base64,${window.btoa(new XMLSerializer().serializeToString(svg))}`
 }
@@ -84,14 +85,20 @@ function getNotes (note, clef, settings) {
   let notes = []
   const restNote = clef === 'bass' ? 'd/3' : 'b/4'
 
+  const getStemDirection = n => {
+    const value = n.split('/')[1]
+    if (clef === 'bass') return value >= 3 ? -1 : 1
+    if (clef === 'treble') return value >= 5 ? -1 : 1
+  }
+
   if (settings.context === 'whole') {
-    notes = [ new Flow.StaveNote({ clef, keys: [note], duration: "w" })]
+    notes = [ new Flow.StaveNote({ clef, keys: [note], duration: 'w' })]
   } else if (settings.context === 'random-rests') {
     const durations = randomBarDurations()
     const noteIndex = randomInt(durations.length)
     notes = durations.map((duration, index) => {
       if (index === noteIndex) {
-        const stem_direction = note.split('/')[1] >= 3 ? -1 : 1
+        let stem_direction = getStemDirection(note)
         return new Flow.StaveNote({ clef, keys: [note], duration, stem_direction })
       }
       return new Flow.StaveNote({ clef, keys: [restNote], duration: duration + 'r' })
@@ -101,7 +108,7 @@ function getNotes (note, clef, settings) {
     const noteIndex = randomInt(durations.length)
     notes = durations.map((duration, index) => {
       if (index === noteIndex) {
-        const stem_direction = note.split('/')[1] >= 3 ? -1 : 1
+        const stem_direction = getStemDirection(note)
         const n = new Flow.StaveNote({ clef, keys: [note], duration, stem_direction })
         if (theme === 'light') {
           n.setStyle({ strokeStyle: '#169', fillStyle: '#169' })
@@ -111,11 +118,36 @@ function getNotes (note, clef, settings) {
         return n
       } else {
         const randomNote = NoteGenerator.uniformRandomNote(clef)
-        const stem_direction = randomNote.split('/')[1] >= 3 ? -1 : 1
+        const stem_direction = getStemDirection(randomNote)
         return new Flow.StaveNote({ clef, keys: [randomNote], duration, stem_direction })
       }
     })
   }
 
   return notes
+}
+
+function getOtherStaffNotes (clef, settings) {
+  const restNote = clef === 'bass' ? 'd/3' : 'b/4'
+
+  const getStemDirection = n => {
+    const value = n.split('/')[1]
+    if (clef === 'bass') return value >= 3 ? -1 : 1
+    if (clef === 'treble') return value >= 5 ? -1 : 1
+  }
+
+  if (settings.context === 'random-rests') {
+    return [new Flow.StaveNote({ clef, keys: [restNote], duration: 'wr' })]
+  }
+
+  if (settings.context === 'random-notes') {
+    const durations = randomBarDurations()
+    return durations.map((duration, index) => {
+      const randomNote = NoteGenerator.uniformRandomNote(clef)
+      const stem_direction = getStemDirection(randomNote)
+      return new Flow.StaveNote({ clef, keys: [randomNote], duration, stem_direction })
+    })
+  }
+
+  return []
 }
