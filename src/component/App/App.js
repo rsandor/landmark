@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import './App.scss'
 
 import { connect } from './App.props'
@@ -6,13 +6,20 @@ import NoteGenerator from '../../common/NoteGenerator'
 import { renderNote } from '../../common/NoteRenderer'
 import SettingsMenu from '../SettingsMenu'
 
-function FlashCard ({ clef, note, theme, noteVisible, visible, onMouseDown }) {
+class Staff extends PureComponent {
+  render () {
+    const { clef, note, staff, theme } = this.props
+    const src = renderNote(clef, note, staff, theme)
+    const alt = `Staff displaying ${note} on the ${clef} clef.`
+    return <div className="Staff"><img src={src} alt={alt} /></div>
+  }
+}
+
+function FlashCard ({ clef, note, noteVisible, onMouseDown, staff, theme, visible }) {
   if (!visible) return null
-  const src = renderNote(note, clef, theme)
-  const alt = `Staff displaying ${note} on the ${clef} clef.`
   return (
     <div className="FlashCard" onMouseDown={onMouseDown}>
-      <div className="Staff"><img src={src} alt={alt} /></div>
+      <Staff clef={clef} note={note} staff={staff} theme={theme} />
       <div className={`Answer ${noteVisible ? 'visible' : ''}`}>{noteVisible ? note.replace('/', '').toUpperCase() : '?'}</div>
     </div>
   )
@@ -46,7 +53,7 @@ class ConnectedApp extends Component {
 
   render () {
     return (
-      <div className={`App ${this.state.settingsOpen ? 'settings' : ''} theme-${this.props.theme}`}>
+      <div className={`App ${this.state.settingsOpen ? 'settings' : ''} theme-${this.props.settings.theme}`}>
         <header className="clearfix">
           <h1>
             Landmark
@@ -57,9 +64,10 @@ class ConnectedApp extends Component {
         </header>
         <main>
           <FlashCard visible={!this.state.settingsOpen}
-            theme={this.props.theme}
             clef={this.state.clef}
             note={this.state.note}
+            staff={this.props.settings.staff}
+            theme={this.props.settings.theme}
             noteVisible={this.state.noteVisible}
             onMouseDown={this.onFlashCardClick} />
           <SettingsMenu visible={this.state.settingsOpen} />

@@ -1,12 +1,14 @@
 import store from '../store'
 import { Flow } from 'vexflow'
+import NoteGenerator from './NoteGenerator'
+import { randomBarDurations, randomInt } from './random'
 
-export function renderNote (note, clef, theme) {
-  const {settings} = store.getState()
-  const {bass, treble} = settings.clef
-  if (bass && treble) return renderGrandStaffNote(note, clef, theme)
-  if (bass) return renderBassStaffNote(note, theme)
-  if (treble) return renderTrebleStaffNote(note, theme)
+export function renderNote (clef, note, staff, theme) {
+  switch (staff) {
+    case 'grand': return renderGrandStaffNote(note, clef, theme)
+    case 'bass': return renderBassStaffNote(note, theme)
+    case 'treble': return renderTrebleStaffNote(note, theme)
+  }
   return ''
 }
 
@@ -30,19 +32,49 @@ function svgToDataUrl (svg) {
 }
 
 function renderBassStaffNote (note, theme) {
+  const { settings } = store.getState()
   const { context, div } = getContext(theme)
 
   const bass = new Flow.Stave(0, 40, 185)
   bass.addClef("bass")
   bass.setContext(context).draw()
 
-  const notes = [new Flow.StaveNote({ clef: 'bass', keys: [note], duration: "w" })]
-  const voice = new Flow.Voice({ num_beats: 4, beat_value: 4 })
-  voice.addTickables(notes)
-  const formatter = new Flow.Formatter()
-  formatter.joinVoices([voice]).format([voice], 150)
-  voice.draw(context, bass)
+  let notes = []
 
+  if (settings.context === 'whole') {
+    notes = [ new Flow.StaveNote({ clef: 'bass', keys: [note], duration: "w" })]
+  } else if (settings.context === 'random-rests') {
+    const durations = randomBarDurations()
+    const noteIndex = randomInt(durations.length)
+    notes = durations.map((duration, index) => {
+      if (index === noteIndex) {
+        const stem_direction = note.split('/')[1] >= 3 ? -1 : 1
+        return new Flow.StaveNote({ clef: 'bass', keys: [note], duration, stem_direction })
+      }
+      return new Flow.StaveNote({ clef: 'bass', keys: ['d/3'], duration: duration + 'r' })
+    })
+  } else {
+    const durations = randomBarDurations()
+    const noteIndex = randomInt(durations.length)
+    notes = durations.map((duration, index) => {
+      if (index === noteIndex) {
+        const stem_direction = note.split('/')[1] >= 3 ? -1 : 1
+        const n = new Flow.StaveNote({ clef: 'bass', keys: [note], duration, stem_direction })
+        if (theme === 'light') {
+          n.setStyle({ strokeStyle: '#169', fillStyle: '#169' })
+        } else if (theme === 'dark') {
+          n.setStyle({ strokeStyle: '#49d', fillStyle: '#49d' })
+        }
+        return n
+      } else {
+        const randomNote = NoteGenerator.uniformRandomNote('bass')
+        const stem_direction = randomNote.split('/')[1] >= 3 ? -1 : 1
+        return new Flow.StaveNote({ clef: 'bass', keys: [randomNote], duration, stem_direction })
+      }
+    })
+  }
+
+  Flow.Formatter.FormatAndDraw(context, bass, notes, { auto_beam: true })
   return svgToDataUrl(div.querySelector('svg'))
 }
 

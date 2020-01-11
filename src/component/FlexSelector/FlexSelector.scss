@@ -23,6 +23,11 @@
 .FlexSelector {
   display: flex;
   border-radius: 6px;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
 
   .FlexSelectorOption {
     display: block;

@@ -1,8 +1,8 @@
 import * as reactRedux from 'react-redux'
 
 function state (state) {
-  const { theme } = state.settings
-  return { theme }
+  const { settings } = state
+  return { settings }
 }
 
 function dispatch (dispatch) {
