@@ -1,0 +1,91 @@
+.App {
+  $color-white: #efefe9;
+  $color-black: #000;
+  $transition-duration: 0.4s;
+  $transition:
+    background-color $transition-duration ease,
+    color $transition-duration ease;
+
+  text-align: center;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+
+  background-color: $color-white;
+  color: $color-black;
+  transition: $transition;
+
+  &.settings {
+    background-color: $color-black;
+    color: $color-white;
+    header {
+      background-color: $color-white;
+      color: $color-black;
+    }
+  }
+
+  header {
+    position: relative;
+    padding: 12px 0 8px;
+    margin-bottom: 32px;
+
+    background-color: $color-black;
+    color: $color-white;
+    transition: $transition;
+
+    h1 { margin: 0 }
+
+    .menu-toggle {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      padding: 12px 12px 0px;
+      cursor: pointer;
+    }
+  }
+
+  .Answer {
+    margin-top: 20px;
+    font-size: 120px;
+    font-family: abel;
+    color: #555;
+
+    &.visible { color: #333; }
+  }
+
+  .SettingsMenu {
+    h2 { text-align: center; }
+    text-align: left;
+    padding: 0 18px;
+
+    .selector {
+      display: flex;
+      border-radius: 6px;
+
+      .option {
+        display: block;
+        flex-grow: 1;
+        text-align: center;
+        padding: 12px 0;
+        border: 1px solid #555;
+        cursor: pointer;
+
+        &.selected {
+          background-color: #234;
+        }
+
+        &:first-child {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+          border-right: none;
+        }
+
+        &:last-child {
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+          border-left: none;
+        }
+      }
+    }
+  }
+}
