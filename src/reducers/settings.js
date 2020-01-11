@@ -1,6 +1,7 @@
 import Reducer from './Reducer'
 
-const Settings = new Reducer('NesStudio/sprite', {
+const Settings = new Reducer('Landmark/settings', {
+  theme: 'light',
   clef: {
     treble: true,
     bass: true
@@ -12,12 +13,13 @@ const Settings = new Reducer('NesStudio/sprite', {
   }
 })
 
-const setValue = Settings.action('setValue', (next, payload) => {
-  const { key, value } = payload
-  const [major, minor] = key.split('.')
-  if (!(major in next)) return
-  if (!(minor in next[major])) return
-  next[major][minor] = value
+const themes = new Set(['light', 'dark'])
+
+const setTheme = Settings.action('setTheme', (next, payload) => {
+  const {theme} = payload
+  if (themes.has(theme)) {
+    next.theme = payload.theme
+  }
 })
 
 const toggleNotes = Settings.action('toggleNotes', (next, payload) => {
@@ -49,4 +51,4 @@ const setBassClef = Settings.action('setBassClef', next => {
 })
 
 export default Settings.reducer
-export { setValue, toggleNotes, setGrandStaff, setTrebleClef, setBassClef }
+export { setTheme, toggleNotes, setGrandStaff, setTrebleClef, setBassClef }
