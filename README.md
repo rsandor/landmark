@@ -1,8 +1,19 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Landmark
+Music reading flashcard react app based on the "Landmark" system.
+
+## Using Landmark
+
+- The application is published and freely available here: https://rsandor.github.io/landmark
+- It is optimized for mobile, so it looks best on a smart phone
+- You can make an "app" link on iOS by clicking the "share" icon in mobile Safari and choosing "Add to Homepage"
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn deploy`
+
+Build and deploys the app to github pages.
 
 ### `yarn start`
 
