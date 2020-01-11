@@ -27,44 +27,18 @@ export function sortNotes (noteArray) {
   })
 }
 
-window.rootNotes = () => {
-  const s = new Set()
-  notes.treble.second.forEach(n => s.add(n))
-  notes.bass.second.forEach(n => s.add(n))
-  const n = Array.from(s)
-  sortNotes(n)
-  console.log(n.map(note => note.replace('/', '').toUpperCase()).join(' '))
-}
-
-window.secondNotes = () => {
-  const s = new Set()
-  notes.treble.second.forEach(n => s.add(n))
-  notes.bass.second.forEach(n => s.add(n))
-  const n = Array.from(s)
-  sortNotes(n)
-  console.log(n.map(note => note.replace('/', '').toUpperCase()).join(' '))
-}
-
-window.thirdNotes = () => {
-  const s = new Set()
-  notes.treble.third.forEach(n => s.add(n))
-  notes.bass.third.forEach(n => s.add(n))
-  const n = Array.from(s)
-  sortNotes(n)
-  console.log(n.map(note => note.replace('/', '').toUpperCase()).join(' '))
-}
-
-
 class NoteGenerator {
   get settings () {
     return store.getState().settings
   }
 
   randomClef () {
-    const clefs = []
-    if (this.settings.clef.treble) clefs.push('treble')
-    if (this.settings.clef.bass) clefs.push('bass')
-    return randomElement(clefs)
+    const { staff } = this.settings
+    switch (staff) {
+      case 'treble': return 'treble'
+      case 'bass': return 'bass'
+      default: return randomElement(['treble', 'bass'])
+    }
   }
 
   randomNote (clef) {
@@ -72,6 +46,15 @@ class NoteGenerator {
       this.settings.notes.root ? notes[clef].root : [],
       this.settings.notes.second ? notes[clef].second : [],
       this.settings.notes.third ? notes[clef].third : []
+    )))
+    return randomElement(noteSelection)
+  }
+
+  uniformRandomNote (clef) {
+    const noteSelection = Array.from(new Set([].concat(
+      notes[clef].root,
+      notes[clef].second,
+      notes[clef].third
     )))
     return randomElement(noteSelection)
   }
