@@ -8,8 +8,8 @@ import SettingsMenu from '../SettingsMenu'
 
 class Staff extends PureComponent {
   render () {
-    const { clef, note, context, staff, theme } = this.props
-    const src = renderNote(clef, note, { context, staff, theme })
+    const { clef, note, context, showClefs, staff, theme } = this.props
+    const src = renderNote(clef, note, { context, showClefs, staff, theme })
     const alt = `Staff displaying ${note} on the ${clef} clef.`
     return <div className="Staff"><img src={src} alt={alt} /></div>
   }
@@ -23,6 +23,7 @@ function ConnectedFlashCard ({ clef, note, noteVisible, onMouseDown, visible, se
         note={note}
         context={settings.context}
         staff={settings.staff}
+        showClefs={settings.showClefs}
         theme={settings.theme} />
       <div className={`Answer ${noteVisible ? 'visible' : ''}`}>{noteVisible ? note.replace('/', '').toUpperCase() : '?'}</div>
     </div>

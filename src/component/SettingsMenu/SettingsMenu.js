@@ -4,15 +4,20 @@ import './SettingsMenu.scss'
 import { connect } from './SettingsMenu.props'
 import FlexSelector from '../FlexSelector'
 
-function ConnectedSettingsMenu ({ settings, setContext, setStaff, setTheme, toggleNotes, visible }) {
+function ConnectedSettingsMenu ({ settings, setContext, setShowClefs, setStaff, setTheme, toggleNotes, visible }) {
   if (!visible) return null
 
-  const { notes, staff, theme } = settings
+  const { notes, showClefs, staff, theme } = settings
 
   const staffOptions = [
     { label: 'Grand (Piano)', selected: staff === 'grand', onClick: () => setStaff('grand') },
     { label: 'Treble (G)', selected: staff === 'treble', onClick: () => setStaff('treble') },
     { label: 'Bass (F)', selected: staff === 'bass', onClick: () => setStaff('bass') },
+  ]
+
+  const showClefOptions = [
+    { label: 'Show Clefs', selected: showClefs, onClick: () => setShowClefs(true) },
+    { label: 'Hide Clefs', selected: !showClefs, onClick: () => setShowClefs(false) },
   ]
 
   const noteOptions = [
@@ -47,6 +52,7 @@ function ConnectedSettingsMenu ({ settings, setContext, setStaff, setTheme, togg
       <div className="section">
         <h3>Staff</h3>
         <FlexSelector options={staffOptions} />
+        <FlexSelector options={showClefOptions} />
       </div>
 
       <div className="section">

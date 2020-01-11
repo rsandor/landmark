@@ -1,3 +1,4 @@
+import isBoolean from 'lodash/isBoolean'
 import Reducer from './Reducer'
 
 const Settings = new Reducer('Landmark/settings', {
@@ -7,8 +8,9 @@ const Settings = new Reducer('Landmark/settings', {
     second: false,
     third: false
   },
-  theme: 'light',
+  showClefs: true,
   staff: 'grand',
+  theme: 'light',
 })
 
 const contexts = new Set(['whole', 'random-rests', 'random-notes'])
@@ -18,6 +20,12 @@ const themes = new Set(['light', 'dark'])
 const setContext = Settings.action('setContext', (next, payload) => {
   if (contexts.has(payload.context)) {
     next.context = payload.context
+  }
+})
+
+const setShowClefs = Settings.action('setShowClefs', (next, payload) => {
+  if (isBoolean(payload.showClefs)) {
+    next.showClefs = payload.showClefs
   }
 })
 
@@ -51,4 +59,4 @@ const toggleNotes = Settings.action('toggleNotes', (next, payload) => {
 })
 
 export default Settings.reducer
-export { setContext, setStaff, setTheme, toggleNotes }
+export { setContext, setShowClefs, setStaff, setTheme, toggleNotes }

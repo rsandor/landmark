@@ -16,7 +16,7 @@ function renderBassStaffNote (note, settings) {
   const { context, div } = getContext(settings)
   const notes = getNotes(note, 'bass', settings)
   const bass = new Flow.Stave(0, 40, 185)
-  bass.addClef('bass')
+  if (settings.showClefs) bass.addClef('bass')
   bass.setContext(context).draw()
   Flow.Formatter.FormatAndDraw(context, bass, notes, { auto_beam: true })
   return svgToDataUrl(div.querySelector('svg'))
@@ -26,7 +26,7 @@ function renderTrebleStaffNote (note, settings) {
   const { context, div } = getContext(settings)
   const notes = getNotes(note, 'treble', settings)
   const treble = new Flow.Stave(0, 40, 185)
-  treble.addClef('treble')
+  if (settings.showClefs) treble.addClef('treble')
   treble.setContext(context).draw()
   Flow.Formatter.FormatAndDraw(context, treble, notes, { auto_beam: true })
   return svgToDataUrl(div.querySelector('svg'))
@@ -36,20 +36,22 @@ function renderGrandStaffNote (note, clef, settings) {
   const { context, div } = getContext(settings)
 
   const treble = new Flow.Stave(20, 0, 160)
-  treble.addClef('treble')
+  if (settings.showClefs) treble.addClef('treble')
   treble.setContext(context).draw()
 
   const bass = new Flow.Stave(20, 100, 160)
-  bass.addClef('bass')
+  if (settings.showClefs) bass.addClef('bass')
   bass.setContext(context).draw()
 
   const connector = new Flow.StaveConnector(treble, bass)
   connector.setType('singleLeft')
   connector.setContext(context).draw()
 
-  const brace = new Flow.StaveConnector(treble, bass)
-  brace.setType('brace')
-  brace.setContext(context).draw()
+  if (settings.showClefs) {
+    const brace = new Flow.StaveConnector(treble, bass)
+    brace.setType('brace')
+    brace.setContext(context).draw()
+  }
 
   const notes = getNotes(note, clef, settings)
   const altNotes = getOtherStaffNotes(clef === 'bass' ? 'treble' : 'bass', settings)
