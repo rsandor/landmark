@@ -48,17 +48,30 @@ class ConnectedApp extends Component {
       timerOpen: false
     }
     this.timerInterval = null
+    this.clearCompleteTimeout = false
   }
 
   componentDidMount () {
     if (!this.timerInterval) {
-      this.timerInterval = setInterval(() => this.props.updateCurrentTime(), 500)
+      this.timerInterval = setInterval(this.updateTimer.bind(this), 500)
     }
   }
 
   componentWillUnmount () {
     if (this.timerInterval) {
       clearInterval(this.timerInterval)
+      this.timerInterval = null
+    }
+  }
+
+  updateTimer () {
+    this.props.updateCurrentTime()
+    if (this.props.timer.state === 'complete' && !this.clearCompleteTimeout) {
+      this.clearCompleteTimeout = true
+      this.clearCompleteTimeout = setTimeout(() => {
+        this.props.clearComplete()
+        this.clearCompleteTimeout = false
+      }, 5000)
     }
   }
 
@@ -105,10 +118,15 @@ class ConnectedApp extends Component {
   }
 
   get currentTime () {
-    if (this.props.timer.state !== 'running') return null
-    return (
-      <div className="current-time">{format(this.props.timer)}</div>
-    )
+    if (this.state.settingsOpen) return null
+    const { state } = this.props.timer
+    if (state === 'running') {
+      return <div className="current-time">{format(this.props.timer)}</div>
+    }
+    if (state === 'complete') {
+      return <div className="current-time complete">0:00</div>
+    }
+    return null
   }
 
   render () {

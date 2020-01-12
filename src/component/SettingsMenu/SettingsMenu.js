@@ -65,6 +65,10 @@ function ConnectedSettingsMenu ({ settings, setContext, setShowClefs, setStaff, 
         <h3>Theme</h3>
         <FlexSelector options={themeOptions} />
       </div>
+
+      <div className="section">
+        <div className="button reload-app" onClick={() => window.location.reload(true)}>Reload App</div>
+      </div>
     </div>
   )
 }

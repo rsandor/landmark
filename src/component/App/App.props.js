@@ -1,5 +1,5 @@
 import * as reactRedux from 'react-redux'
-import { updateCurrentTime } from '../../reducers/timer'
+import { clearComplete, updateCurrentTime } from '../../reducers/timer'
 
 function state (state) {
   const { timer, settings } = state
@@ -8,6 +8,7 @@ function state (state) {
 
 function dispatch (dispatch) {
   return {
+    clearComplete: () => dispatch(clearComplete()),
     updateCurrentTime: () => dispatch(updateCurrentTime())
   }
 }
