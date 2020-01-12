@@ -44,7 +44,7 @@ const setDuration = Timer.action('setDuration', (next, payload) => {
 const setState = Timer.action('setState', (next, payload) => {
   if (!states.has(payload.state)) return
   if (next.state === 'stopped' && payload.state === 'running') {
-    next.expiryTime = getCurrentTime() + 5 + 60 * next.duration
+    next.expiryTime = getCurrentTime() + 60 * next.duration
     next.state = 'running'
   } else if (next.state === 'running' && payload.state === 'stopped') {
     next.expiryTime = null
