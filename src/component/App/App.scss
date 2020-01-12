@@ -38,7 +38,6 @@
   .button {
     color: $color-white;
     background-color: $color-dark-highlight;
-    cursor: pointer;
     &.red { background-color: $color-dark-highlight-red; }
   }
 }
@@ -102,4 +101,6 @@
   }
 
   h2 { text-align: center; }
+
+  .button { cursor: pointer }
 }
