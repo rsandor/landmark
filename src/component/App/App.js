@@ -118,6 +118,7 @@ class ConnectedApp extends Component {
   }
 
   get currentTime () {
+    if (this.state.settingsOpen) return null
     const { state } = this.props.timer
     if (state === 'running') {
       return <div className="current-time">{format(this.props.timer)}</div>
