@@ -2,9 +2,11 @@ import React, { Component, PureComponent } from 'react'
 import './App.scss'
 
 import { connect } from './App.props'
+import { format } from '../../reducers/timer'
 import NoteGenerator from '../../common/NoteGenerator'
 import { renderNote } from '../../common/NoteRenderer'
 import SettingsMenu from '../SettingsMenu'
+import TimerMenu from '../TimerMenu'
 
 class Staff extends PureComponent {
   render () {
@@ -39,8 +41,27 @@ class ConnectedApp extends Component {
       clef,
       note,
       noteVisible: false,
-      settingsOpen: false
+      settingsOpen: false,
+      timerOpen: false
     }
+    this.timerInterval = null
+  }
+
+  componentDidMount () {
+    if (!this.timerInterval) {
+      this.timerInterval = setInterval(() => this.props.updateCurrentTime(), 500)
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval)
+    }
+  }
+
+  get isFlashCardVisible () {
+    const { settingsOpen, timerOpen } = this.state
+    return !settingsOpen && !timerOpen
   }
 
   get onFlashCardClick () {
@@ -57,26 +78,52 @@ class ConnectedApp extends Component {
     return () => this.setState(prev => ({ settingsOpen: !prev.settingsOpen }))
   }
 
+  get settingsToggle () {
+    if (this.state.timerOpen) return null
+    return (
+      <div className="menu-toggle" onClick={this.onToggleSettings}>
+        <i className="material-icons md-36">{this.state.settingsOpen ? 'close' : 'menu'}</i>
+      </div>
+    )
+  }
+
+  get onToggleTimer () {
+    return () => this.setState(prev => ({ timerOpen: !prev.timerOpen }))
+  }
+
+  get timerToggle () {
+    if (this.state.settingsOpen) return null
+    return (
+      <div className="timer-toggle" onClick={this.onToggleTimer}>
+        <i className="material-icons md-36">{this.state.timerOpen ? 'close' : 'timer' }</i>
+      </div>
+    )
+  }
+
+  get currentTime () {
+    if (this.props.timer.state !== 'running') return null
+    return (
+      <div className="current-time">{format(this.props.timer)}</div>
+    )
+  }
+
   render () {
     return (
       <div className={`App ${this.state.settingsOpen ? 'settings' : ''} theme-${this.props.settings.theme}`}>
         <header className="clearfix">
-          <h1>
-            Landmark
-            <div className="menu-toggle" onClick={this.onToggleSettings}>
-              <i className="material-icons md-36">menu</i>
-            </div>
-          </h1>
+          <h1>Landmark</h1>
+          {this.timerToggle}
+          {this.currentTime}
+          {this.settingsToggle}
         </header>
         <main>
-          <FlashCard visible={!this.state.settingsOpen}
+          <FlashCard visible={this.isFlashCardVisible}
             clef={this.state.clef}
             note={this.state.note}
-            staff={this.props.settings.staff}
-            theme={this.props.settings.theme}
             noteVisible={this.state.noteVisible}
             onMouseDown={this.onFlashCardClick} />
           <SettingsMenu visible={this.state.settingsOpen} />
+          <TimerMenu visible={this.state.timerOpen} onTimerStarted={this.onToggleTimer} />
         </main>
       </div>
     )

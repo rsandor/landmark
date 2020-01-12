@@ -1,12 +1,15 @@
 import * as reactRedux from 'react-redux'
+import { updateCurrentTime } from '../../reducers/timer'
 
 function state (state) {
-  const { settings } = state
-  return { settings }
+  const { timer, settings } = state
+  return { timer, settings }
 }
 
 function dispatch (dispatch) {
-  return {}
+  return {
+    updateCurrentTime: () => dispatch(updateCurrentTime())
+  }
 }
 
 export function connect (component) {

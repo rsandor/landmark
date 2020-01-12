@@ -14,12 +14,10 @@
     &.visible { color: $color-black; }
   }
 
-  .selector .option {
-    border: 1px solid $color-dark-gray;
-    &.selected {
-      background-color: $color-light-highlight;
-      color: $color-white;
-    }
+  .button {
+    color: $color-white;
+    background-color: $color-light-highlight;
+    &.red { background-color: $color-light-highlight-red; }
   }
 }
 
@@ -37,12 +35,10 @@
     &.visible { color: $color-white; }
   }
 
-  .selector .option {
-    border: 1px solid $color-dark-gray;
-    &.selected {
-      background-color: $color-dark-highlight;
-      color: $color-white;
-    }
+  .button {
+    color: $color-white;
+    background-color: $color-dark-highlight;
+    &.red { background-color: $color-dark-highlight-red; }
   }
 }
 
@@ -74,47 +70,37 @@
       padding: 12px 12px 0px;
       cursor: pointer;
     }
+
+    .timer-toggle {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      padding: 12px 12px 0px;
+      cursor: pointer;
+    }
+
+    .current-time {
+      font-family: 'luxi';
+      position: absolute;
+      top: 20px;
+      left: 56px;
+      width: 50px;
+      text-align: right;
+    }
   }
 
   .Answer {
-    margin-top: 20px;
+    margin-top: 22px;
     font-size: 120px;
     font-family: abel;
   }
 
-  .SettingsMenu {
-    h2 { text-align: center; }
+  .menu {
     text-align: left;
     padding: 0 18px;
   }
 
-  .selector {
-    display: flex;
-    border-radius: 6px;
+  h2 { text-align: center; }
 
-    .option {
-      display: block;
-      flex-grow: 1;
-      text-align: center;
-      padding: 12px 0;
-      border: 1px solid #555;
-      cursor: pointer;
-
-      &.selected {
-        background-color: #234;
-      }
-
-      &:first-child {
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-        border-right: none;
-      }
-
-      &:last-child {
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        border-left: none;
-      }
-    }
-  }
+  .button { cursor: pointer }
 }
