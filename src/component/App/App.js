@@ -64,7 +64,7 @@ class ConnectedApp extends Component {
           <h1>
             Landmark
             <div className="menu-toggle" onClick={this.onToggleSettings}>
-              <i className="material-icons md-36">menu</i>
+              <i className="material-icons md-36">{this.state.settingsOpen ? 'close' : 'menu'}</i>
             </div>
           </h1>
         </header>
