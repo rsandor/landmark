@@ -17,12 +17,13 @@ class Staff extends PureComponent {
   }
 }
 
-function ConnectedFlashCard ({ clef, note, noteVisible, onMouseDown, visible, settings }) {
+function ConnectedFlashCard ({ clef, note, seed, noteVisible, onMouseDown, visible, settings }) {
   if (!visible) return null
   return (
     <div className="FlashCard" onMouseDown={onMouseDown}>
       <Staff clef={clef}
         note={note}
+        seed={seed}
         context={settings.context}
         staff={settings.staff}
         showClefs={settings.showClefs}
@@ -37,9 +38,11 @@ class ConnectedApp extends Component {
   constructor (props) {
     super(props)
     const { clef, note } = NoteGenerator.next()
+    const seed = Math.random()
     this.state = {
       clef,
       note,
+      seed,
       noteVisible: false,
       settingsOpen: false,
       timerOpen: false
@@ -70,7 +73,8 @@ class ConnectedApp extends Component {
         return { noteVisible: true }
       }
       const { clef, note } = NoteGenerator.next()
-      return { clef, note, noteVisible: false }
+      const seed = Math.random()
+      return { clef, note, seed, noteVisible: false }
     })
   }
 
@@ -120,6 +124,7 @@ class ConnectedApp extends Component {
           <FlashCard visible={this.isFlashCardVisible}
             clef={this.state.clef}
             note={this.state.note}
+            seed={this.state.seed}
             noteVisible={this.state.noteVisible}
             onMouseDown={this.onFlashCardClick} />
           <SettingsMenu visible={this.state.settingsOpen} />
