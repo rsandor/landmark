@@ -5,7 +5,7 @@ import { connect } from './TimerMenu.props'
 import { format } from '../../reducers/timer'
 import FlexSelector from '../FlexSelector'
 
-function ConnectedTimerMenu ({ visible, timer, setDuration, setState }) {
+function ConnectedTimerMenu ({ visible, onTimerStarted, timer, setDuration, setState }) {
   if (!visible) return null
 
   const { duration } = timer
@@ -18,6 +18,9 @@ function ConnectedTimerMenu ({ visible, timer, setDuration, setState }) {
   ]
 
   const toggleStart = () => {
+    if (timer.state === 'stopped') {
+      onTimerStarted()
+    }
     setState((timer.state === 'stopped') ? 'running' : 'stopped')
   }
 

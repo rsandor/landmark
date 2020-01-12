@@ -123,7 +123,7 @@ class ConnectedApp extends Component {
             noteVisible={this.state.noteVisible}
             onMouseDown={this.onFlashCardClick} />
           <SettingsMenu visible={this.state.settingsOpen} />
-          <TimerMenu visible={this.state.timerOpen} />
+          <TimerMenu visible={this.state.timerOpen} onTimerStarted={this.onToggleTimer} />
         </main>
       </div>
     )
