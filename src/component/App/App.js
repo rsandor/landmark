@@ -72,8 +72,6 @@ class ConnectedApp extends Component {
           <FlashCard visible={!this.state.settingsOpen}
             clef={this.state.clef}
             note={this.state.note}
-            staff={this.props.settings.staff}
-            theme={this.props.settings.theme}
             noteVisible={this.state.noteVisible}
             onMouseDown={this.onFlashCardClick} />
           <SettingsMenu visible={this.state.settingsOpen} />
