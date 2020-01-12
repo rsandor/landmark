@@ -46,7 +46,7 @@ function ConnectedSettingsMenu ({ settings, setContext, setShowClefs, setStaff, 
   ]
 
   return (
-    <div className="SettingsMenu">
+    <div className="SettingsMenu menu">
       <h2>Settings</h2>
 
       <div className="section">
