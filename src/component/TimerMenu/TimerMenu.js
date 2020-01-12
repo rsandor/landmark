@@ -18,10 +18,13 @@ function ConnectedTimerMenu ({ visible, onTimerStarted, timer, setDuration, setS
   ]
 
   const toggleStart = () => {
-    if (timer.state === 'stopped') {
+    const { state } = timer
+    if (state === 'stopped' || state === 'complete') {
       onTimerStarted()
+      setState('running')
+    } else {
+      setState('stopped')
     }
-    setState((timer.state === 'stopped') ? 'running' : 'stopped')
   }
 
   return (
@@ -36,7 +39,7 @@ function ConnectedTimerMenu ({ visible, onTimerStarted, timer, setDuration, setS
 
       <div className="controls section">
         <div className={`button${timer.state === 'running' ? ' red' : ''}`} onClick={toggleStart}>
-          {timer.state === 'stopped' ? 'Start' : 'Stop'}
+          {timer.state === 'running' ? 'Stop' : 'Start'}
         </div>
       </div>
     </div>

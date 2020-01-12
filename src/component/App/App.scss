@@ -87,6 +87,13 @@
       width: 50px;
       text-align: right;
     }
+
+    .current-time.complete {
+      @keyframes timer-complete {
+        100% { color: red; }
+      }
+      animation: timer-complete 0.5s linear infinite;
+    }
   }
 
   .Answer {
